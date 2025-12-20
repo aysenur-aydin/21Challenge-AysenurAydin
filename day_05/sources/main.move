@@ -35,15 +35,12 @@ module challenge::day_05 {
         vector::push_back(&mut list.habits, habit);
     }
 
-    // TODO: Write a function 'complete_habit' that:
-    // - Takes list: &mut HabitList and index: u64
-    // - Checks if index is valid (less than vector length)
-    // - If valid, marks that habit's completed field as true
-    // Use vector::length() to get the length
-    // Use vector::borrow_mut() to get a mutable reference to an element
-    // public fun complete_habit(list: &mut HabitList, index: u64) {
-    //     // Your code here
-    //     // Hint: if (index < length) { ... }
-    // }
+    public fun complete_habit(list: &mut HabitList, index: u64) {
+        let vector_length = vector::length(&list.habits);
+        if (index < vector_length) {
+            let habit = vector::borrow_mut(&mut list.habits, index);
+            habit.completed = true;
+        }
+    }
 }
 
