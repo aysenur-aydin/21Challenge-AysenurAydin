@@ -1,17 +1,7 @@
-/// DAY 7: Unit Tests for Habit Tracker
-///
-/// Today you will:
-/// 1. Learn how to write tests in Move
-/// 2. Write tests for your habit tracker
-/// 3. Use assert! macro
-///
-/// Note: You can copy code from day_06/sources/solution.move if needed
-
 module challenge::day_07 {
     use std::vector;
     use std::string::{Self, String};
 
-    // Copy from day_06: Habit struct with String
     public struct Habit has copy, drop {
         name: String,
         completed: bool,
@@ -51,25 +41,31 @@ module challenge::day_07 {
         }
     }
 
-    // Note: assert! is a built-in macro in Move 2024 - no import needed!
+    #[test]
+    fun test_add_habits() {
+        let mut list = empty_list();
 
-    // TODO: Write a test 'test_add_habits' that:
-    // - Creates an empty list
-    // - Adds 1-2 habits
-    // - Checks that the list length is correct
-    // #[test]
-    // fun test_add_habits() {
-    //     // Your code here
-    //     // Use b"Exercise".to_string() to create a String
-    // }
+        let habit_1 = new_habit(b"Run".to_string());
+        let habit_2 = new_habit(b"Code".to_string());
 
-    // TODO: Write a test 'test_complete_habit' that:
-    // - Creates a list and adds a habit
-    // - Completes the habit
-    // - Checks that completed == true
-    // #[test]
-    // fun test_complete_habit() {
-    //     // Your code here
-    // }
+        add_habit(&mut list, habit_1);
+        add_habit(&mut list, habit_2);
+
+        let length = vector::length(&list.habits);
+        assert!(length == 2, 0);
+    }
+
+    #[test]
+    fun test_complete_habit() {
+        let mut list = empty_list();
+
+        let habit = new_habit(b"Run".to_string());
+        add_habit(&mut list, habit);
+
+        complete_habit(&mut list, 0);
+
+        let completed_habit = vector::borrow(&list.habits, 0);
+        assert!(completed_habit.completed == true, 0);
+    }
 }
 
