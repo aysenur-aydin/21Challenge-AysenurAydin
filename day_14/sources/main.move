@@ -1,12 +1,3 @@
-/// DAY 14: Tests for Bounty Board
-/// 
-/// Today you will:
-/// 1. Write comprehensive tests
-/// 2. Test all the functions you've created
-/// 3. Practice test organization
-///
-/// Note: You can copy code from day_13/sources/solution.move if needed
-
 module challenge::day_14 {
     use std::vector;
     use std::string::String;
@@ -16,7 +7,6 @@ module challenge::day_14 {
     use std::unit_test::assert_eq;
     use std::string;
 
-    // Copy from day_13: All structs and functions
     public enum TaskStatus has copy, drop {
         Open,
         Completed,
@@ -81,15 +71,6 @@ module challenge::day_14 {
         };
         count
     }
-
-    // Note: assert! is a built-in macro in Move 2024 - no import needed!
-
-    // TODO: Write at least 3 tests:
-    // 
-    // Test 1: test_create_board_and_add_task
-    // - Create a board with an owner
-    // - Add a task
-    // - Verify the task was added
     // 
     // Test 2: test_complete_task
     // - Create board, add tasks
@@ -100,9 +81,43 @@ module challenge::day_14 {
     // - Create board, add multiple tasks with different rewards
     // - Verify total_reward is correct
     // 
-    // #[test]
-    // fun test_create_board_and_add_task() {
-    //     // Your code here
-    // }
+    #[test]
+    fun test_create_board_and_add_task() {
+        let owner = @0x7;
+        let mut board = new_board(owner);
+        let task = new_task("test", 20);
+        add_task(&mut board, task);
+
+        let length = vector::length(&board.tasks);
+        assert!(length == 1, 0);
+    }
+
+    #[test]
+    fun test_complete_task() {
+        let owner = @0x7;
+        let mut board = new_board(owner);
+        let task1 = new_task("task1", 30);
+        let task2 = new_task("task2", 40);
+        add_task(&mut board, task1);
+        add_task(&mut board, task2);
+        let task = vector::borrow_mut(&mut board.tasks, 0);
+        complete_task(task);    
+
+        let completed = completed_count(&board);
+        assert!(completed == 1, 1);
+    }
+
+    #[test]
+    fun test_total_reward() {
+        let owner = @0x7;
+        let mut board = new_board(owner);
+        let task1 = new_task("task1", 30);
+        let task2 = new_task("task2", 40);
+        add_task(&mut board, task1);
+        add_task(&mut board, task2);
+
+        let total = total_reward(&board);
+        assert!(total == 70, 2);
+    }
 }
 
